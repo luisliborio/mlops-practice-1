@@ -1,0 +1,122 @@
+# This is my default .gitignore template
+
+# ==========================================
+# 0. extra files
+# ==========================================
+tests.ipynb
+
+# ==========================================
+# 1. Python and Virtual Environments
+# ==========================================
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+venv/
+.venv/
+env/
+.env/
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Distribution / packaging
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# ==========================================
+# 2. Deep Learning 
+# ==========================================
+# Model weights and checkpoints
+*.pt
+*.pth
+*.ckpt
+*.h5
+*.hdf5
+*.keras
+*.onnx
+*.safetensors
+*.pb
+saved_model/
+
+# Framework caches (e.g., Hugging Face)
+.cache/
+huggingface/
+.huggingface/
+
+# ==========================================
+# 3. Data and Training Artifacts
+# ==========================================
+# Raw and processed data directories
+data/
+datasets/
+raw/
+processed/
+interim/
+external/
+
+# Outputs, predictions, and detected anomalies
+output/
+outputs/
+predictions/
+results/
+runs/
+
+# ==========================================
+# 4. Logs and Monitoring
+# ==========================================
+# TensorBoard and Weights & Biases
+runs/
+wandb/
+*.log
+logs/
+
+# ==========================================
+# 5. Jupyter Notebooks and Exploration
+# ==========================================
+.ipynb_checkpoints
+profile_default/
+ipython_config.py
+
+# ==========================================
+# 6. Environment Variables and Secrets
+# ==========================================
+.env
+.env.*
+!.env.example
+secrets.json
+credentials/
+
+# ==========================================
+# 7. IDE and Editor Configurations
+# ==========================================
+# VS Code
+.vscode/
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# Windows
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+*.cab
+*.msi
+*.msix
+*.msm
+*.msp

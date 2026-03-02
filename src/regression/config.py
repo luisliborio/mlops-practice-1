@@ -5,13 +5,13 @@ import os
 # 1. RUN IDENTITY
 # ==========================================
 # e.g., 'xgb_baseline', 'xgb_4_feats'
-RUN_TAG = "xgb_5feats"
+RUN_TAG = "xgb_3feats"
 
 # ==========================================
 # 2. DATA PATHS
 # ==========================================
-DATASET_PATH = "../data/training_taxi_data.parquet" # inputs
-REPORTS_DIR = "runs/1"                              # outputs
+DATASET_PATH = "data/training_taxi_data.parquet" # inputs
+REPORTS_DIR = "runs/regression/1"                # outputs
 
 # ==========================================
 # 3. FEATURE ENGINEERING

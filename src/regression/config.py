@@ -5,7 +5,7 @@ import os
 # 1. RUN IDENTITY
 # ==========================================
 # e.g., 'xgb_baseline', 'xgb_4_feats'
-RUN_TAG = "xgb_3feats"
+RUN_TAG = "xgb_5feats"
 
 # ==========================================
 # 2. DATA PATHS

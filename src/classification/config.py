@@ -4,41 +4,40 @@ import os
 # ==========================================
 # 1. RUN IDENTITY
 # ==========================================
-# e.g., 'xgb_baseline', 'xgb_4_feats'
-RUN_TAG = "xgb_3feats"
+# e.g., 'xgb_cls_baseline', 'xgb_cls_tuned'
+RUN_TAG = "xgb_cls_5feats"
 
 # ==========================================
 # 2. DATA PATHS
 # ==========================================
 DATASET_PATH = "data/training_taxi_data.parquet" # inputs
-REPORTS_DIR = "runs/regression/1"                # outputs
+REPORTS_DIR = "runs/classification/1"            # outputs
 
 # ==========================================
 # 3. FEATURE ENGINEERING
 # ==========================================
-# List of features to be used in the current run
 FEATURES = [
-    'fare_amount',       # included at 3feats
-    'duration_minutes',  # included at 3feats
-    'trip_distance',     # included at 3feats
-    'PULocationID',    # included at 4feats
-    'DOLocationID',    # included at 5feats
-    # 'pickup_hour'      # not tested
+    'fare_amount',   # 3feats run
+    'trip_distance', # 3feats run
+    'PULocationID',  # 3feats run
+    'pickup_hour',    # 4feats run
+    'trip_type',     # 5feats run
 ]
 
-TARGET = 'tip_amount'
+TARGET = 'payment_type'
 
 # ==========================================
-# 4. MODEL HYPERPARAMETERS (XGBoost)
+# 4. MODEL HYPERPARAMETERS (XGBClassifier)
 # ==========================================
 # Note: eval_metric and early_stopping are handled inside the CV loop in run.py
 MODEL_PARAMS = {
     'n_estimators': 1000,
     'max_depth': 6,
     'learning_rate': 0.05,
-    'objective': 'reg:squarederror',
+    'objective': 'multi:softmax',
+    'num_class': 3,               # 0=Credit, 1=Cash, 2=Other (merged 3+4)
+    'eval_metric': 'mlogloss',
     'early_stopping_rounds': 50,
-    'eval_metric': 'rmse',
     'n_jobs': -1,
     'random_state': 42
 }
@@ -48,5 +47,4 @@ MODEL_PARAMS = {
 # ==========================================
 RANDOM_SEED = 42
 TEST_SIZE = 0.20
-CV_FOLDS = 5  # Number of Cross-Validation folds
-EARLY_STOPPING_ROUNDS = 50
+CV_FOLDS = 5

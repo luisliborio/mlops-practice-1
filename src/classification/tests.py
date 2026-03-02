@@ -3,7 +3,7 @@ import os
 import pickle
 import pandas as pd
 import numpy as np
-from scipy import stats
+from statsmodels.stats.contingency_tables import mcnemar
 import config
 
 def load_reports(reports_dir):
@@ -37,60 +37,66 @@ def run_statistical_comparison(reports_dir):
     for r in reports:
         summary_data.append({
             'Tag': r['tag'],
-            'Test MAE ($)': r['test_metrics']['mae'],
-            'Test RMSE': r['test_metrics']['rmse'],
-            'CV MAE (Avg)': r['cv_metrics']['mae_mean'],
+            'Test F1 (W)': r['test_metrics']['f1'],
+            'Test Acc': r['test_metrics']['acc'],
             'Features': len(r['features'])
         })
     
-    df_summary = pd.DataFrame(summary_data).sort_values(by='Test MAE ($)', ascending=True)
-    print(" PERFORMANCE RANKING (Sorted by Test MAE):")
+    df_summary = pd.DataFrame(summary_data).sort_values(by='Test F1 (W)', ascending=False)
+    print(" PERFORMANCE RANKING (Sorted by F1 Score):")
     print(df_summary.to_string(index=False))
     print("-" * 80)
 
     # ---------------------------------------------------------
-    # 2. Statistical Test (Champion vs Challengers)
+    # 2. Champion Details
+    # ---------------------------------------------------------
+    best_model = max(reports, key=lambda x: x['test_metrics']['f1'])
+    
+    print(f"\n CHAMPION MODEL DETAILS: [{best_model['tag']}]")
+    print("Confusion Matrix (Rows=True, Cols=Pred):")
+    print(f"Classes: {best_model.get('class_map', 'N/A')}")
+    print(best_model['test_metrics']['conf_matrix'])
+    print("-" * 80)
+
+    # ---------------------------------------------------------
+    # 3. Statistical Test (McNemar's)
     # ---------------------------------------------------------
     if len(reports) < 2:
-        print(" At least 2 reports are needed for statistical comparison.")
         return
 
-    # Identify the champion (lowest Test MAE)
-    best_model = min(reports, key=lambda x: x['test_metrics']['mae'])
-    
-    print(f"\n  HYPOTHESIS TEST (Wilcoxon Signed-Rank)")
-    print(f"   Champion Model: [{best_model['tag']}]")
+    print(f" HYPOTHESIS TEST (McNemar's Test)")
+    print(f"   Champion: [{best_model['tag']}]")
     print("-" * 80)
-    print(f"{'Challenger':<25} | {'Diff MAE':<10} | {'P-Value':<12} | {'Significant?'}")
+    print(f"{'Challenger':<25} | {'Diff F1':<10} | {'P-Value':<12} | {'Significant?'}")
     
-    # Calculate absolute errors for the champion
-    errors_champion = np.abs(best_model['y_test_true'] - best_model['y_test_pred'])
+    # Boolean array: True if prediction was correct
+    champ_correct = (best_model['y_test_pred'] == best_model['y_test_true'])
 
     for r in reports:
         if r['tag'] == best_model['tag']:
             continue
             
-        # Calculate absolute errors for the challenger
-        errors_challenger = np.abs(r['y_test_true'] - r['y_test_pred'])
+        chall_correct = (r['y_test_pred'] == r['y_test_true'])
         
-        # Check integrity
-        if len(errors_champion) != len(errors_challenger):
-            print(f"{r['tag']:<25} | Error: Array length mismatch (check random_state)")
-            continue
-
-        # Wilcoxon Test
-        # Null Hypothesis: The distribution of differences is symmetric about zero (no significant difference)
-        # Alternative 'less': The champion errors are LESS than challenger errors
+        # Build 2x2 Contingency Table for McNemar
+        # [Both Correct, Champion Correct/Chall Wrong]
+        # [Chall Correct/Champ Wrong, Both Wrong]
+        b = np.sum(champ_correct & ~chall_correct) # Champ wins
+        c = np.sum(~champ_correct & chall_correct) # Chall wins
+        
+        # We only need b and c for the calculation
+        table = [[0, b], [c, 0]]
+        
         try:
-            stat, p_value = stats.wilcoxon(errors_champion, errors_challenger, alternative='less')
+            result = mcnemar(table, exact=False, correction=True)
+            p_value = result.pvalue
             
-            is_significant = "YES" if p_value < 0.05 else "NO!"
-            diff_mae = r['test_metrics']['mae'] - best_model['test_metrics']['mae'] 
-            # Note: diff_mae > 0 means Challenger error is higher (Champion is better)
+            is_significant = "YES" if p_value < 0.05 else "NO"
+            diff_f1 = best_model['test_metrics']['f1'] - r['test_metrics']['f1']
             
-            print(f"{r['tag']:<25} | {diff_mae:+.2f}     | {p_value:.2e}     | {is_significant}")
+            print(f"{r['tag']:<25} | {diff_f1:+.4f}     | {p_value:.2e}     | {is_significant}")
         except Exception as e:
-            print(f"{r['tag']:<25} | Error in statistical test: {e}")
+            print(f"{r['tag']:<25} | Error: {e}")
 
 if __name__ == "__main__":
     run_statistical_comparison(config.REPORTS_DIR)

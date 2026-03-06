@@ -12,6 +12,7 @@ RUN_TAG = "xgb_5feats"
 # ==========================================
 DATASET_PATH = "data/training_taxi_data.parquet" # inputs
 REPORTS_DIR = "runs/regression/1"                # outputs
+MODEL_PATH = f"models/regression/{RUN_TAG}_v1.pkl" # None for not saving
 
 # ==========================================
 # 3. FEATURE ENGINEERING

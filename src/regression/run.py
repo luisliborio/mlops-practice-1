@@ -142,6 +142,19 @@ def main():
         pickle.dump(report_data, f)
         
     print(f"     Report saved to: {output_file}")
+    
+    # ---------------------------------------------------------
+    # 6. Save Model
+    # ---------------------------------------------------------
+    model_path = getattr(config, 'MODEL_PATH', None)
+    if model_path is not None:
+        model_dir = os.path.dirname(model_path)
+        if model_dir and not os.path.exists(model_dir):
+            os.makedirs(model_dir)
+            
+        final_model.save_model(model_path)
+        print(f"     Model saved to: {model_path}")
+        
     print("="*60)
 
 if __name__ == "__main__":

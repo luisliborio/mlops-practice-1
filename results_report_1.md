@@ -2,7 +2,7 @@
 
 ***
 
-# 📑 NYC Taxi Prediction: Experimental Results & Analysis
+# 📑 NYC Taxi Prediction: Experimental Results & Analysis (PRACTICE 1)
 
 ## 1. Executive Summary
 This report analyzes the performance of simplified machine learning pipelines for the **NYC Green Taxi dataset**. Two tasks were performed: **Tip Regression** and **Payment Type Classification**.

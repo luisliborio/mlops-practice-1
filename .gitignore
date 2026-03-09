@@ -62,7 +62,7 @@ huggingface/
 # 3. Data and Training Artifacts
 # ==========================================
 # Raw and processed data directories
-data/
+# data/
 datasets/
 raw/
 processed/

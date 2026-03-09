@@ -1,5 +1,5 @@
 outs:
-- md5: 5155c79f3fe6c3a1dfb5a04f7785c989
-  size: 343985
+- md5: 410291737b71b2547b08913c6096d0b8
+  size: 626823
   hash: md5
   path: training_taxi_data.parquet

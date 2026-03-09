@@ -51,7 +51,6 @@ wheels/
 *.safetensors
 *.pb
 saved_model/
-models/
 
 # Framework caches (e.g., Hugging Face)
 .cache/

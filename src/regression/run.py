@@ -29,6 +29,7 @@ def main():
         raise FileNotFoundError(f"File not found: {config.DATASET_PATH}")
     
     df = pd.read_parquet(config.DATASET_PATH)
+    df = df[df['payment_type'] == 1] # Tips are all 0 for payments different from 1
     
     # Select features and target
     X = df[config.FEATURES].copy()

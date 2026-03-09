@@ -5,15 +5,15 @@ import os
 # 1. RUN IDENTITY
 # ==========================================
 # e.g., 'xgb_baseline', 'xgb_4_feats'
-RUN_TAG = "xgb_5feats_v1_data02"
+RUN_TAG = "xgb_5feats_v4_data02"
 
 # ==========================================
 # 2. DATA PATHS
 # ==========================================
 DATASET_PATH = "data/training_taxi_data.parquet" # inputs
-REPORTS_DIR = "runs/regression/2"                # outputs
-PRETRAINED_MODEL_PATH = "models/regression/xgb_5feats_v1.pkl" # evaluate model only
-MODEL_PATH = None # f"models/regression/{RUN_TAG}_v1.pkl" # None for not saving
+REPORTS_DIR = "runs/regression/4"                # outputs
+PRETRAINED_MODEL_PATH = None #f"models/regression/xgb_5feats_v3_data01.pkl" # evaluate model only
+MODEL_PATH = f"models/regression/{RUN_TAG}.pkl" # None for not saving
 
 # ==========================================
 # 3. FEATURE ENGINEERING

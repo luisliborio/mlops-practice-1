@@ -1,0 +1,5 @@
+outs:
+- md5: c50df2e988fb3cb3403896cd2f5110dc
+  size: 939819
+  hash: md5
+  path: xgb_5feats_v4_data02.pkl
